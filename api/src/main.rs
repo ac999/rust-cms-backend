@@ -1,4 +1,5 @@
 use mongodb::{Bson, bson, doc};
+
 use mongodb::{Client, ClientOptions, ThreadedClient};
 use mongodb::db::ThreadedDatabase;
 
@@ -14,10 +15,20 @@ fn main() {
     // be true.
     let verify_peer = false;
 
-    let options = ClientOptions::with_ssl(ca_file, certificate, key_file,
+    let options = ClientOptions::with_ssl(Some(ca_file), certificate, key_file,
                                           verify_peer);
 
     let client = Client::connect_with_options("127.0.0.1", 27017, options)
         .expect("Failed to initialize standalone client.");
 
+    let coll = client.db("zoolx").collection("users");
+
+    let doc = doc! {
+        "_id": "test"
+    };
+
+    let mut cursor = coll.find(Some(doc.clone()), None)
+        .ok().expect("Failed to execute find.");
+
+    let item = cursor.next();
 }
