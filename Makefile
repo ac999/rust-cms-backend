@@ -1,4 +1,4 @@
-version=0.01
+version=0.011 not compiling
 
 push:
 	git add .
