@@ -6,13 +6,16 @@
 <p>This form will be submitted using the POST method:</p>
 
 <form action="/"  method="POST">
-  First name:<br>
-  <input type="text" name="firstname" value="Mickey">
+  Username:<br>
+  <input type="text" name="username" value="test">
   <br>
-  Last name:<br>
-  <input type="text" name="lastname" value="Mouse">
+  Password:<br>
+  <input type="password" name="password" value="test">
+  <br>
+  Confirm Password:<br>
+  <input type="password" name="confirm-password" value="test">
   <br><br>
-  <input type="submit" value="Submit">
+  <input type="submit" name="register" value="Submit">
 </form>
 
 <p>After you submit, notice that, unlike the GET method, the form values is NOT visible in the address bar of the new browser tab.</p>

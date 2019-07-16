@@ -2,6 +2,8 @@ use std::io::prelude::*;
 use std::net::TcpStream;
 use std::net::TcpListener;
 use std::fs;
+extern crate regex;
+use regex::Regex;
 
 fn main() {
     let listenip = "127.0.0.1";
@@ -20,6 +22,7 @@ fn main() {
         handle_connection(_stream);
     }
 }
+
 
 fn handle_connection(mut stream: TcpStream){
     let mut buffer = [0; 512];
@@ -40,6 +43,11 @@ fn handle_connection(mut stream: TcpStream){
         stream.flush().unwrap();
     }
     else if buffer.starts_with(post) {
+        let s = match std::str::from_utf8(&buffer){
+            Ok(v) => v,
+            Err(e) => panic!("Invalid UTF-8 sequence: {}", e),
+        };
+        check_post(s);  
         let contents = fs::read_to_string("post.html").unwrap();
         let response = format!("HTTP/1.1 200 OK\r\n\r\n{}", contents);
     
@@ -47,9 +55,16 @@ fn handle_connection(mut stream: TcpStream){
         stream.flush().unwrap();
     }
     
-    
-    
-    
-    
     println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+}
+
+fn check_post(_buffer: &str){
+    let register = Regex::new(r"username=([A-Za-Z0-9])\&password=([A-Za-z0-9*])\&confirm-password=([A-Za-z0-9*])\&register=Submit$").unwrap();
+    let caps = register.captures(_buffer).unwrap();
+    println!("username={:?}\npassword={:?}\nconfirm-password={:?}",caps.get(0), caps.get(1), caps.get(2));
+
+    //let login = Regex::new(r"").unwrap();
+    //let forgot_password = Regex::new(r"").unwrap();
+    //let logout = Regex::new(r"").unwrap();
+
 }
