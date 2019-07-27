@@ -1,11 +1,12 @@
-[package]
+ [package]
 name = "server"
 version = "0.1.0"
-authors = ["m0ric <andreicristian6@protonmail.com>"]
+authors = ["m0ric <andreicristian6@protonmail.com>", "Marius C <mfc@marius-cristian.com>"]
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-actix-web = "1.0"
+actix-web = "1.0.5"
 serde = { version = "1.0", features = ["derive"] }
+mongodb = {version = "0.3.12", features = ["ssl"] }
