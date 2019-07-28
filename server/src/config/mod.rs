@@ -8,11 +8,12 @@ use std::io::{Error};
 /// The structure for reading the mongodb configuration
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Mongo {
-      db_url		: String
-    , db_name		: String
-    , db_ca_file	: String
-    , db_key_file	: String
-    , db_cert_file	: String
+      pub db_url		: String
+    , pub db_port       : u16
+    , pub db_name		: String
+    , pub db_ca_file	: String
+    , pub db_key_file	: String
+    , pub db_cert_file	: String
     ,
 }
 
@@ -20,7 +21,7 @@ pub struct Mongo {
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Configuration{
 	///mongodb
-	  mongo		: Mongo
+	  pub mongo		: Mongo
 	,
 }
 

@@ -23,6 +23,8 @@
 #[macro_use]
 extern crate serde_derive;
 mod config;
+mod database;
 fn main(){
-	println!("{:#?}", config::load_config());
+	// println!("{:#?}", config::load_config());
+	println!("{:#?}", database::init_connection());
 }
