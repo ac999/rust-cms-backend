@@ -24,5 +24,5 @@
 extern crate serde_derive;
 mod config;
 fn main(){
-	config::load_config();
+	println!("{:#?}", config::load_config());
 }
