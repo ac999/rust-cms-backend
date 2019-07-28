@@ -1,9 +1,0 @@
-{
-	"mongo":{
-		  "dbUrl":"mongo"
-		, "dbName":"string"
-		, "dbCaFile":"./secrets/ca.crt"
-		, "dbKeyFile":"./secrets/key.pem"
-		, "dbCertFile":"./secrets/ca.crt"
-	}
-}

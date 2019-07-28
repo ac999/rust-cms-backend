@@ -20,7 +20,8 @@
 
 //     let item = cursor.next();
 // }
-
+#[macro_use]
+extern crate serde_derive;
 mod config;
 fn main(){
 	config::load_config();

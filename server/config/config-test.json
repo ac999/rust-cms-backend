@@ -1,0 +1,9 @@
+{
+	"mongo":{
+		  "db_url":"string"
+		, "db_name":"string"
+		, "db_ca_file":"string"
+		, "db_key_file":"string"
+		, "db_cert_file":"string"
+	}
+}
