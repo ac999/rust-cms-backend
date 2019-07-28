@@ -16,9 +16,9 @@ use std::io::{Error};
         verify_peer)
     }
 
-    pub fn db_client(ip: String, port: u16, options: ClientOptions) -> Client{
+    pub fn db_client(ip: String, port: u16, options: ClientOptions) ->
+                                                Result<Client, mongodb::Error> {
         Client::connect_with_options(&ip, port, options)
-            .expect("Failed to initialize standalone client.")
     }
 
     pub fn init_connection() -> Result<Client, Error> {
@@ -32,7 +32,7 @@ use std::io::{Error};
                                         , c.mongo.db_key_file
                                         , false
                                     );
-                Ok(db_client(c.mongo.db_url, c.mongo.db_port, options))
+                Ok(db_client(c.mongo.db_url, c.mongo.db_port, options).unwrap())
             }
             Err(e) => {
                 println!("Module \"database\" cannot init connection w/ error {:#?}", e);

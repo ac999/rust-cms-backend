@@ -1,6 +1,6 @@
 {
 	"mongo":{
-		  "db_url":"mongo"
+		  "db_url":"mongodb://mongo"
 		, "db_port" : 27017
 		, "db_name":"string"
 		, "db_ca_file":"./secrets/ca.crt"
