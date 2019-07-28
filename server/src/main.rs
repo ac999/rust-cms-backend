@@ -20,6 +20,8 @@
 
 //     let item = cursor.next();
 // }
+
+mod config;
 fn main(){
-	
+	config::load_config();
 }
