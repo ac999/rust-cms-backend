@@ -4,7 +4,7 @@
 		, "db_port" : 27017
 		, "db_name" : "string"
 		, "db_ca_file" : "string"
-		, "db_key_file" : "string"
 		, "db_cert_file" : "string"
+		, "db_key_file" : "string"
 	}
 }

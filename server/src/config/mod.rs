@@ -12,8 +12,8 @@ pub struct Mongo {
     , pub db_port       : u16
     , pub db_name		: String
     , pub db_ca_file	: String
-    , pub db_key_file	: String
     , pub db_cert_file	: String
+    , pub db_key_file   : String
     ,
 }
 
@@ -32,7 +32,7 @@ pub fn load_config() -> Result<Configuration, Error> {
     match conf {
         Ok(configuration) => Ok(serde_json::from_str(
             &configuration)
-            .unwrap()),
-        Err(no_file) => return Err(no_file),
+            .expect("invalid json format")),
+        Err(no_file) => Err(no_file),
     }
 }

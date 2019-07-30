@@ -1,6 +1,6 @@
-// use mongodb::{Bson, bson, doc};
-// use mongodb::{Client, ClientOptions, ThreadedClient};
-// use mongodb::db::ThreadedDatabase;
+use mongodb::{Bson, bson, doc};
+use mongodb::{Client, ClientOptions, ThreadedClient};
+use mongodb::db::ThreadedDatabase;
 // pub use crate::db_connection::connection;
 
 // fn main() {
@@ -26,5 +26,12 @@ mod config;
 mod database;
 fn main(){
 	// println!("{:#?}", config::load_config());
-	println!("{:#?}", database::init_connection());
+	// println!("{:#?}", database::init_connection());
+    let _client = database::init_connection()
+        .expect("Failed to init connection.");
+
+    let db = _client.db("test");
+    db.create_collection("admin", None).unwrap();
+    let collection_names = db.collection_names(None).unwrap();
+    assert!(!collection_names.is_empty());
 }
