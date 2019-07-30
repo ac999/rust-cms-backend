@@ -1,5 +1,4 @@
 pub use mongodb::{Client, ClientOptions, ThreadedClient};
-// use std::io::{Error};
 
     // ca_file = path to file containing trusted server certificates.
     // cl_certificate = path to file containing client certificate.
@@ -18,12 +17,13 @@ pub use mongodb::{Client, ClientOptions, ThreadedClient};
     }
 
     pub fn db_client(ip: String, port: u16, options: ClientOptions) ->
-                                                Result<Client, mongodb::Error> {
+                                            Result<Client, mongodb::Error> {
         Client::connect_with_options(&ip, port, options)
     }
 
     pub fn init_connection() -> Result<Client, mongodb::error::Error> {
-        let _config = super::config::load_config().expect("database::init_connection(): error loading config");
+        let _config = super::config::load_config()
+        .expect("database::init_connection(): error loading config");
         
         let options = set_ssl_options(
                                           _config.mongo.db_ca_file
@@ -32,7 +32,11 @@ pub use mongodb::{Client, ClientOptions, ThreadedClient};
                                         , false
                                     );
 
-        let _client = db_client(_config.mongo.db_url, _config.mongo.db_port, options);
+        let _client = db_client(
+              _config.mongo.db_url
+            , _config.mongo.db_port
+            , options
+            );
 
         match _client{
             Ok(c) => Ok(c),

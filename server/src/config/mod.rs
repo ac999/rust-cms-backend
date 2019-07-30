@@ -30,9 +30,8 @@ pub fn load_config() -> Result<Configuration, Error> {
 	let conf = fs::read_to_string("./config/config-dev.json");
 
     match conf {
-        Ok(configuration) => Ok(serde_json::from_str(
-            &configuration)
-            .expect("invalid json format")),
-        Err(no_file) => Err(no_file),
+          Ok(configuration) => Ok(serde_json::from_str(&configuration)
+            .expect("invalid json format"))
+        , Err(no_file) => Err(no_file),
     }
 }

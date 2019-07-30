@@ -1,4 +1,4 @@
-version=0.01.02 
+version=0.01.03 
 
 push:
 	git add .

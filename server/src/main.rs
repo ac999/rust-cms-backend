@@ -22,8 +22,12 @@ use mongodb::db::ThreadedDatabase;
 // }
 #[macro_use]
 extern crate serde_derive;
+
 mod config;
 mod database;
+mod api;
+mod data;
+
 fn main(){
 	// println!("{:#?}", config::load_config());
 	// println!("{:#?}", database::init_connection());
@@ -31,7 +35,9 @@ fn main(){
         .expect("Failed to init connection.");
 
     let db = _client.db("test");
-    db.create_collection("admin", None).unwrap();
-    let collection_names = db.collection_names(None).unwrap();
-    assert!(!collection_names.is_empty());
+
+    let request = data::load_register_request().expect("error @ request struct");
+
+    api::registerRequest(db, request);
+    
 }
