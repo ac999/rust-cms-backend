@@ -15,24 +15,26 @@ mod database;
 mod api;
 mod models;
 
-/*
 fn register(info: web::Json<RegisterRequest>
-        ) -> Result<mongodb::doc> {
-        api::register_request(_client, info)
+        ) -> Result<String> {
+
+    Ok(format!("Welcome, {}!", info.username))
+        // api::register_request(_client, info)
+
     }
-*/
+
 
 fn main(){
 	// println!("{:#?}", config::load_config());
 	// println!("{:#?}", database::init_connection());
     let _client = database::init_connection()
         .expect("Failed to init connection.");
-
+/*
     let request = models::load_register_request().expect("error @ request struct");
 
     api::register_request(_client, request);
-
-    /*
+*/
+    
     HttpServer::new(|| App::new()
         .route(
               "/register"
@@ -43,5 +45,5 @@ fn main(){
         .unwrap()
         .run()
         .unwrap();
-        */
+
 }

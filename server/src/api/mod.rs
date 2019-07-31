@@ -2,7 +2,7 @@ use mongodb::db::{Database, ThreadedDatabase};
 use mongodb::{Client, ThreadedClient};
 use mongodb::{bson, doc};
 
-use bcrypt::{DEFAULT_COST, hash, verify};
+use bcrypt::{hash}; //, verify};
 
 pub fn register_request(_client: Client
 		, request_struct: super::models::RegisterRequest
