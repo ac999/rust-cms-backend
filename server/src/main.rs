@@ -3,30 +3,24 @@ use mongodb::{Client, ClientOptions, ThreadedClient};
 use mongodb::db::ThreadedDatabase;
 // pub use crate::db_connection::connection;
 
-// fn main() {
-//     let client = connection::db_client("127.0.0.1", 27017,
-//                                        connection::set_ssl_options(
-//             "ssl/ca.crt", "ssl/mongodb.crt", "ssl/mongodb.key", false)
-//         );
+use actix_web::{web, App, HttpServer, Result};
 
-//     let coll = client.db("zoolx").collection("users");
+use crate::models::RegisterRequest;
 
-//     let doc = doc! {
-//         "_id": "test"
-//     };
-
-//     let mut cursor = coll.find(Some(doc.clone()), None)
-//         .ok().expect("Failed to execute find.");
-
-//     let item = cursor.next();
-// }
 #[macro_use]
 extern crate serde_derive;
 
 mod config;
 mod database;
 mod api;
-mod data;
+mod models;
+
+/*
+fn register(info: web::Json<RegisterRequest>
+        ) -> Result<mongodb::doc> {
+        api::register_request(_client, info)
+    }
+*/
 
 fn main(){
 	// println!("{:#?}", config::load_config());
@@ -34,10 +28,20 @@ fn main(){
     let _client = database::init_connection()
         .expect("Failed to init connection.");
 
-    let db = _client.db("test");
+    let request = models::load_register_request().expect("error @ request struct");
 
-    let request = data::load_register_request().expect("error @ request struct");
+    api::register_request(_client, request);
 
-    api::registerRequest(db, request);
-    
+    /*
+    HttpServer::new(|| App::new()
+        .route(
+              "/register"
+            , web::post().to(register)
+            )
+        )
+        .bind("127.0.0.1:8080") 
+        .unwrap()
+        .run()
+        .unwrap();
+        */
 }

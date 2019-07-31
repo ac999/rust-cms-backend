@@ -1,6 +1,6 @@
 {
-	  "email":			 "contact@zoolx.com"
+	  "email":			 "contact@zoolx.ro"
 	, "username":		 "test1"
 	, "password":		 "12345678"
-	, "repeatPassword": "12345678"
+	, "repeat_password":  "12345678"
 }

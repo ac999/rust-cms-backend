@@ -7,7 +7,7 @@ pub struct RegisterRequest {
       pub email: String
     , pub username: String
     , pub password: String
-    , pub repeatPassword: String
+    , pub repeat_password: String
     ,
 }
 
@@ -25,7 +25,7 @@ pub struct LoginResponse{
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct RecoveryRequest {
+pub struct RecoverRequest {
       pub email: String
     ,
 }
@@ -46,4 +46,26 @@ pub fn load_register_request() -> Result <RegisterRequest, Error> {
 		, Err(no_file) => Err(no_file)
 		,
 	}
+}
+
+pub fn load_login_request() -> Result <LoginRequest, Error> {
+  let request = fs::read_to_string("./request/login-user.json");
+
+  match request{
+      Ok(r) => Ok(serde_json::from_str(
+      &r).expect("invalid json format"))
+    , Err(no_file) => Err(no_file)
+    ,
+  }
+}
+
+pub fn load_recover_request() -> Result <RecoverRequest, Error> {
+  let request = fs::read_to_string("./request/recover-user.json");
+
+  match request{
+      Ok(r) => Ok(serde_json::from_str(
+      &r).expect("invalid json format"))
+    , Err(no_file) => Err(no_file)
+    ,
+  }
 }

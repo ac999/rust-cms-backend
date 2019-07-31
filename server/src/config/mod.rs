@@ -32,6 +32,7 @@ pub fn load_config() -> Result<Configuration, Error> {
     match conf {
           Ok(configuration) => Ok(serde_json::from_str(&configuration)
             .expect("invalid json format"))
-        , Err(no_file) => Err(no_file),
+        , Err(no_file) => Err(no_file)
+        ,
     }
 }
