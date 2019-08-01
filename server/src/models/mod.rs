@@ -36,36 +36,3 @@ pub struct ErrorListResponse {
 	,
 
 }
-
-pub fn load_register_request() -> Result <RegisterRequest, Error> {
-	let request = fs::read_to_string("./request/register-user.json");
-
-	match request{
-		  Ok(r) => Ok(serde_json::from_str(
-			&r).expect("invalid json format"))
-		, Err(no_file) => Err(no_file)
-		,
-	}
-}
-
-pub fn load_login_request() -> Result <LoginRequest, Error> {
-  let request = fs::read_to_string("./request/login-user.json");
-
-  match request{
-      Ok(r) => Ok(serde_json::from_str(
-      &r).expect("invalid json format"))
-    , Err(no_file) => Err(no_file)
-    ,
-  }
-}
-
-pub fn load_recover_request() -> Result <RecoverRequest, Error> {
-  let request = fs::read_to_string("./request/recover-user.json");
-
-  match request{
-      Ok(r) => Ok(serde_json::from_str(
-      &r).expect("invalid json format"))
-    , Err(no_file) => Err(no_file)
-    ,
-  }
-}
