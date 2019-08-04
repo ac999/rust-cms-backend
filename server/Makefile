@@ -14,3 +14,8 @@ login:
 
 recover:
 	curl $(header) $(request) --data @$(rec) $(addr)/recover
+
+test:
+	while true; do\
+		curl $(header) $(request) --data @$(reg) $(addr)/register; \
+	done
