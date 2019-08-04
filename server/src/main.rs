@@ -21,6 +21,7 @@ fn get_token() -> String{
     String::from("1t2o3k4e5n6")
 }
 
+#[derive(Clone)]
 struct MyClient{
     client: mongodb::Client
     ,
@@ -85,10 +86,12 @@ fn main(){
 	// println!("{:#?}", database::init_connection());
     /*let _client = database::init_connection()
         .expect("Failed to init connection.");*/
+
+    let my_client = database::init_connection()
+            .expect("Failed to init connection.");
     
     HttpServer::new(|| App::new()
-        .data(MyClient{ client: database::init_connection()
-            .expect("Failed to init connection.") })
+        .data(MyClient{ client: database::init_connection().unwrap()})
         .route(
               "/register"
             , web::post().to(check_register_info)
