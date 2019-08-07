@@ -1,3 +1,4 @@
+#[macro_use]
 extern crate mysql;
 extern crate dotenv;
 
@@ -6,6 +7,7 @@ extern crate dotenv;
 pub mod models;
 pub mod config;
 pub mod other;
+pub mod database;
 
 fn main(){
 
@@ -21,5 +23,5 @@ fn main(){
     //     .run()
     //     .unwrap();
     let _config = config::read_env();
-    
+    let pool = database::establish_connection(_config);
 }
