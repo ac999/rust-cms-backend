@@ -54,35 +54,35 @@ pub fn read_env() -> ConfigStruct{
 	}
 }
 impl ConfigStruct{
-	pub fn get_db_host(&self) -> String {
-		self.db_host
+	pub fn get_db_host(&self) -> &String {
+		&self.db_host
 	}
 
-	pub fn get_db_port(&self) -> u16 {
-		self.db_port
+	pub fn get_db_port(&self) -> &u16 {
+		&self.db_port
 	}
 
-	pub fn get_db_user(&self) -> String {
-		self.db_user
+	pub fn get_db_user(&self) -> &String {
+		&self.db_user
 	}
 
-	pub fn get_db_pass(&self) -> String {
-		self.db_pass
+	pub fn get_db_pass(&self) -> &String {
+		&self.db_pass
 	}
 
-	pub fn get_db_name(&self) -> String {
-		self.db_name
+	pub fn get_db_name(&self) -> &String {
+		&self.db_name
 	}
 
-	pub fn get_ssl_ca(&self) -> String {
-		self.ca_path
+	pub fn get_ssl_ca(&self) -> &String {
+		&self.ca_path
 	}
 
-	pub fn get_ssl_crt(&self) -> String{
-		self.crt_path
+	pub fn get_ssl_crt(&self) -> &String{
+		&self.crt_path
 	}
 
-	pub fn get_ssl_key(&self) -> String{
-		self.key_path
+	pub fn get_ssl_key(&self) -> &String{
+		&self.key_path
 	}
 }
