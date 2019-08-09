@@ -6,14 +6,14 @@ use std::env;
 use crate::other;
 
 pub struct ConfigStruct{
-	  db_host: String
-	, db_port: u16
-	, db_user: String
-	, db_pass: String
-	, db_name: String
-	, ca_path: String
-	, crt_path: String
-	, key_path: String
+	  pub db_host: String
+	, pub db_port: u16
+	, pub db_user: String
+	, pub db_pass: String
+	, pub db_name: String
+	, pub ssl_ca: String
+	, pub ssl_crt: String
+	, pub ssl_key: String
 	,
 }
 
@@ -38,51 +38,18 @@ pub fn read_env() -> ConfigStruct{
 		, db_name : env::var("DB_NAME")
 			.expect("DB_NAME not found in .env")
 
-		, ca_path : other::file_exist(
+		, ssl_ca : other::file_exist(
 			env::var("CA_PATH").expect("CA_PATH not found in .env")
 			).expect("Cannot open file.")
 
-		, crt_path : other::file_exist(
+		, ssl_crt : other::file_exist(
 			env::var("CRT_PATH").expect("CRT_PATH not found in .env")
 			).expect("Cannot open file.")
 
-		, key_path : other::file_exist(
+		, ssl_key : other::file_exist(
 			env::var("KEY_PATH").expect("KEY_PATH not found in .env")
 			).expect("Cannot open file.")
 
 		,
-	}
-}
-impl ConfigStruct{
-	pub fn get_db_host(&self) -> &String {
-		&self.db_host
-	}
-
-	pub fn get_db_port(&self) -> &u16 {
-		&self.db_port
-	}
-
-	pub fn get_db_user(&self) -> &String {
-		&self.db_user
-	}
-
-	pub fn get_db_pass(&self) -> &String {
-		&self.db_pass
-	}
-
-	pub fn get_db_name(&self) -> &String {
-		&self.db_name
-	}
-
-	pub fn get_ssl_ca(&self) -> &String {
-		&self.ca_path
-	}
-
-	pub fn get_ssl_crt(&self) -> &String{
-		&self.crt_path
-	}
-
-	pub fn get_ssl_key(&self) -> &String{
-		&self.key_path
 	}
 }

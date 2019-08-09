@@ -23,5 +23,5 @@ fn main(){
     //     .run()
     //     .unwrap();
     let _config = config::read_env();
-    let pool = database::establish_connection(_config);
+    let _pool = database::establish_connection(_config);
 }
