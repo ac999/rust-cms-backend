@@ -43,3 +43,8 @@ pub fn establish_connection() -> my::Pool {
 		set_opts(_config)
 		).expect(&format!("Could not connect to database."))
 }
+
+pub struct MyPool {
+	  pool : my::Pool
+	,
+}

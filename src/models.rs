@@ -1,6 +1,8 @@
-#[derive(Debug, PartialEq, Eq)]
-pub struct Payment {
-    pub customer_id: i32,
-    pub amount: i32,
-    pub account_name: Option<String>,
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RegisterRequest {
+      pub email: String
+    , pub username: String
+    , pub password: String
+    , pub repeat_password: String
+    ,
 }
