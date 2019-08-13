@@ -21,11 +21,18 @@ fn main(){
               "/register"
             , web::post().to(server::register)
             )
+        .route(
+              "/login"
+            , web::post().to(server::login)
+            )
+        .route(
+              "/recover"
+            , web::post().to(server::password_reset)
+            )
         )
         .bind("127.0.0.1:8081") 
         .expect("Can not bind to 127.0.0.1:8081")
         .run()
         .unwrap();
-    // let _pool = database::establish_connection();
 
 }

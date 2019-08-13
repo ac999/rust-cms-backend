@@ -2,6 +2,11 @@ use mysql as my;
 
 use crate::config;
 
+pub struct MyPool {
+	  pub pool : my::Pool
+	,
+}
+
 fn set_ssl(
 	  ca_file: String
 	, crt_file: String
@@ -42,9 +47,4 @@ pub fn establish_connection() -> my::Pool {
 	my::Pool::new(
 		set_opts(_config)
 		).expect(&format!("Could not connect to database."))
-}
-
-pub struct MyPool {
-	  pool : my::Pool
-	,
 }
