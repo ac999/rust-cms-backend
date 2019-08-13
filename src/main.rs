@@ -1,6 +1,7 @@
 #[macro_use]
 extern crate mysql;
-extern crate dotenv;
+#[macro_use]
+extern crate serde_derive;
 
 // use actix_web::{web, App, HttpServer, Result};
 
@@ -22,6 +23,5 @@ fn main(){
     //     .expect("Can not bind to 127.0.0.1:8081")
     //     .run()
     //     .unwrap();
-    let _config = config::read_env();
-    let _pool = database::establish_connection(_config);
+    let _pool = database::establish_connection();
 }

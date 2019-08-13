@@ -1,0 +1,13 @@
+{
+	"mysql" : {
+		  "db_host" : ""
+		, "db_port" : 3306
+		, "db_user" : ""
+		, "db_pass" : ""
+		, "db_name" : ""
+		, "ssl_ca"  : "./secrets/ca.pem"
+		, "ssl_crt" : "./secrets/client-cert.pem"
+		, "ssl_key" : "./secrets/client-key.pem"
+
+	}
+}

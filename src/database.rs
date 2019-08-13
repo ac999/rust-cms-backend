@@ -2,33 +2,44 @@ use mysql as my;
 
 use crate::config;
 
-fn get_ssl(
-	_config: config::ConfigStruct
+fn set_ssl(
+	  ca_file: String
+	, crt_file: String
+	, key_file: String
 	) -> Option<(String, Option<(String, String)>)> {
-	Some((_config.ssl_ca
+	Some((ca_file
 		, Some((
-			  _config.ssl_crt
-			, _config.ssl_key
+			  crt_file
+			, key_file
 			))
 		))
 }
 
-fn get_opts(_config: config::ConfigStruct) -> my::OptsBuilder {
+fn set_opts(_config: config::Configuration) -> my::OptsBuilder {
 	let mut builder=my::OptsBuilder::new();
 	builder
-	.ip_or_hostname(Some(&_config.db_host))
-	.tcp_port(_config.db_port)
-	.user(Some(&_config.db_user))
-	.pass(Some(&_config.db_pass))
-	.db_name(Some(&_config.db_name))
-	.verify_peer(false)
-	.ssl_opts(get_ssl(_config));
+	.ip_or_hostname(Some(&_config.mysql.db_host))
+	.tcp_port(_config.mysql.db_port)
+	.user(Some(&_config.mysql.db_user))
+	.pass(Some(&_config.mysql.db_pass))
+	.db_name(Some(&_config.mysql.db_name))
+	// Change verify_peer to true for deployment.
+	.verify_peer(false);
+	// .ssl_opts(set_ssl(
+	// 	  _config.mysql.ssl_ca
+	// 	, _config.mysql.ssl_crt
+	// 	, _config.mysql.ssl_key
+	// 	))
+	
 	builder
 }
 
-pub fn establish_connection(_config: config::ConfigStruct) -> my::Pool {
+pub fn establish_connection() -> my::Pool {
 	
+	let _config = config::load_config()
+		.expect("config load error");
+
 	my::Pool::new(
-		get_opts(_config)
+		set_opts(_config)
 		).expect(&format!("Could not connect to database."))
 }
