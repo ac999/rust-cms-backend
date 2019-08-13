@@ -29,7 +29,7 @@ fn set_opts(_config: config::Configuration) -> my::OptsBuilder {
 	// 	  _config.mysql.ssl_ca
 	// 	, _config.mysql.ssl_crt
 	// 	, _config.mysql.ssl_key
-	// 	))
+	// 	));
 	
 	builder
 }
