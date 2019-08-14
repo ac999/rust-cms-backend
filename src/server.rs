@@ -2,6 +2,7 @@ use bcrypt::{hash, verify};
 
 use crate::models;
 use crate::database;
+use crate::db_api;
 
 use std::io::Error;
 
@@ -25,6 +26,7 @@ pub fn register(my_pool: web::Data<database::MyPool>
 	let repeat_password = &info.repeat_password;
 
 	if password == repeat_password{
+		println!("query_email returned {:?}.",db_api::query_email(email.to_string(), &my_pool.pool));
 		Ok(format!("{}+{}+{}",email, username, password))
 	}
 	else {

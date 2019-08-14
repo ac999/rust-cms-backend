@@ -2,9 +2,9 @@
 	"mysql" : {
 		  "db_host" : "localhost"
 		, "db_port" : 3306
-		, "db_user" : "rust_driver"
+		, "db_user" : "test"
 		, "db_pass" : "!xRL9^R7#*7MW=KsgxYXX%kENds-d?Hy"
-		, "db_name" : "zoolx"
+		, "db_name" : "test"
 		, "ssl_ca"  : "./secrets/ca.pem"
 		, "ssl_crt" : "./secrets/client-cert.pem"
 		, "ssl_key" : "./secrets/client-key.pem"
