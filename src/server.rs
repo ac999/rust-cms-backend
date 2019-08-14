@@ -5,6 +5,8 @@ use crate::database;
 use crate::db_api;
 use crate::other;
 
+use time;
+
 use std::io::Error;
 
 use actix_web::{web, Result};
@@ -27,15 +29,8 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 
 	if other::password_check(_info.password.to_string())==false{
 		return Ok(String::from(
-			"Password must be at least of length 8 and the supported symbols are:
-	!@#$%^&*()-_`,./<>?:;'+="))
+			"Password must be at least of length 8."))
 	}
-
-	// if other::register_criteria(_info.email.to_string()
-	// 	,_info.password.to_string()) == false {
-	// 	return Ok(String::from(
-	// 		"Could not register. E-Mail may be used, or password is weak."))
-	// }
 
 	let email=&_info.email;
 	let username = &_info.username;

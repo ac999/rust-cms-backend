@@ -46,3 +46,19 @@ pub fn query_user(user: String, pool: &mysql::Pool) -> bool {
 		).expect("Error @ prep_exec")
 
 }
+
+pub fn new_user(email: String
+	, user: String
+	, password: String
+	) -> bool {
+	let query = format!(
+		"INSERT INTO users (email, user, password, created_at)
+		VALUES ({}, {}, {}, NOW())"
+		, email
+		, user
+		, password
+	);
+
+	true
+
+}
