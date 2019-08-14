@@ -16,17 +16,17 @@ fn verify_hash(password: String, password_hash: String) -> bool {
 	verify(password, &password_hash).expect("Hash verify error.")
 }
 
-pub fn register(my_pool: web::Data<database::MyPool>
-    , info: web::Json<models::RegisterRequest>
+pub fn register(_my_pool: web::Data<database::MyPool>
+    , _info: web::Json<models::RegisterRequest>
         ) -> Result<String> {
 	
-	let email = &info.email;
-	let username = &info.username;
-	let password = &info.password;
-	let repeat_password = &info.repeat_password;
+	let email = &_info.email;
+	let username = &_info.username;
+	let password = &_info.password;
+	let repeat_password = &_info.repeat_password;
 
 	if password == repeat_password{
-		println!("query_email returned {:?}.",db_api::query_email(email.to_string(), &my_pool.pool));
+		println!("query_email returned {:?}.",db_api::query_email(email.to_string(), &_my_pool.pool));
 		Ok(format!("{}+{}+{}",email, username, password))
 	}
 	else {
@@ -36,16 +36,16 @@ pub fn register(my_pool: web::Data<database::MyPool>
     
 }
 
-pub fn login(my_pool: web::Data<database::MyPool>
-    , info: web::Json<models::LoginRequest>
+pub fn login(_my_pool: web::Data<database::MyPool>
+    , _info: web::Json<models::LoginRequest>
         ) -> String {
 	
 	String::from("test")
     
 }
 
-pub fn password_reset(my_pool: web::Data<database::MyPool>
-    , info: web::Json<models::PasswordResetRequest>
+pub fn password_reset(_my_pool: web::Data<database::MyPool>
+    , _info: web::Json<models::PasswordResetRequest>
         ) -> String {
 	
 	String::from("test")
