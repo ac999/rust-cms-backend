@@ -15,7 +15,7 @@ pub fn query_email(email: String, pool: &mysql::Pool) -> bool {
 				  	true
 				  }
 				, None => {
-					println!("No entry in db");
+					println!("email not in db");
 					false
 				}
 			}
@@ -25,8 +25,8 @@ pub fn query_email(email: String, pool: &mysql::Pool) -> bool {
 
 }
 
-pub fn query_user(user: String, pool: &mysql::Pool) -> bool {
-	let query = format!("SELECT * FROM users WHERE user LIKE \"{}\"", user);
+pub fn query_username(username: String, pool: &mysql::Pool) -> bool {
+	let query = format!("SELECT * FROM users WHERE username LIKE \"{}\"", username);
 	println!("Query is {}.", query);
 
 	pool.prep_exec( query, () )
@@ -37,7 +37,7 @@ pub fn query_user(user: String, pool: &mysql::Pool) -> bool {
 				  	true
 				  }
 				, None => {
-					println!("No entry in db");
+					println!("username not in db");
 					false
 				}
 			}
@@ -48,17 +48,27 @@ pub fn query_user(user: String, pool: &mysql::Pool) -> bool {
 }
 
 pub fn new_user(email: String
-	, user: String
+	, username: String
 	, password: String
+	, pool: &mysql::Pool
 	) -> bool {
 	let query = format!(
-		"INSERT INTO users (email, user, password, created_at)
-		VALUES ({}, {}, {}, NOW())"
+		"INSERT INTO users (email, username, password, created_at)
+		VALUES (\"{}\", \"{}\", \"{}\", NOW())"
 		, email
-		, user
+		, username
 		, password
 	);
 
-	true
+	match pool.prep_exec( query, () ){
+		  Ok(r) => {
+		  	println!("{:?}", r);
+		  	true
+		  }
+		, Err(e) => {
+			println!("{:?}", e);
+			false
+		}
+	}
 
 }

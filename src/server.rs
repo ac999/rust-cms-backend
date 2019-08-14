@@ -37,14 +37,29 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 	let password = &_info.password;
 	let repeat_password = &_info.repeat_password;
 
+	if db_api::query_username(username.to_string(), &_my_pool.pool) {
+		return Ok(format!("{} already in database.", username))
+	}
+
 	if password == repeat_password{
 		match db_api::query_email(email.to_string(), &_my_pool.pool){
 			  true => Ok(format!("{} already in database.", email))
-			, false => Ok(format!("Can create account with email: {}", email))
+			, false => {
+				let password = hash_password(password.to_string());
+				match db_api::new_user(
+					  email.to_string()
+					, username.to_string()
+					, password
+					, &_my_pool.pool){
+					  true => Ok(String::from
+						("Account created. Check mail for confirmation."))
+					, false => Ok(String::from
+						("Error creating account. Check again later."))
+				}
+			} 
 		}
 	}
 	else {
-		// To implement
 		Ok(String::from("Passwords must match."))
 	}
     
