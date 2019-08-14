@@ -25,6 +25,18 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 		return Ok(format!("{} is not a valid email.",&_info.email))
 	}
 
+	if other::password_check(_info.password.to_string())==false{
+		return Ok(String::from(
+			"Password must be at least of length 8 and the supported symbols are:
+	!@#$%^&*()-_`,./<>?:;'+="))
+	}
+
+	// if other::register_criteria(_info.email.to_string()
+	// 	,_info.password.to_string()) == false {
+	// 	return Ok(String::from(
+	// 		"Could not register. E-Mail may be used, or password is weak."))
+	// }
+
 	let email=&_info.email;
 	let username = &_info.username;
 	let password = &_info.password;

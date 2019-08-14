@@ -24,3 +24,25 @@ pub fn query_email(email: String, pool: &mysql::Pool) -> bool {
 		).expect("Error @ prep_exec")
 
 }
+
+pub fn query_user(user: String, pool: &mysql::Pool) -> bool {
+	let query = format!("SELECT * FROM users WHERE user LIKE \"{}\"", user);
+	println!("Query is {}.", query);
+
+	pool.prep_exec( query, () )
+		.map(|mut result| {
+			match result.next(){
+				  Some(r) => {
+				  	println!("{:#?}", r);
+				  	true
+				  }
+				, None => {
+					println!("No entry in db");
+					false
+				}
+			}
+
+		}
+		).expect("Error @ prep_exec")
+
+}

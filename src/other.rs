@@ -24,3 +24,11 @@ pub fn mail_check(_mail: String) -> bool {
 	.expect("Regex error");
 	re.is_match(_mail.as_str())
 }
+
+pub fn password_check(_password: String) -> bool {
+	// at least:
+	// length >= 8
+	let re = Regex::new(r"(^[a-zA-Z0-9!@#$%]+.{8,}$)")
+	.expect("Regex error");
+	re.is_match(_password.as_str())
+}
