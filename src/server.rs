@@ -3,6 +3,7 @@ use bcrypt::{hash, verify};
 use crate::models;
 use crate::database;
 use crate::db_api;
+use crate::other;
 
 use std::io::Error;
 
@@ -20,14 +21,20 @@ pub fn register(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::RegisterRequest>
         ) -> Result<String> {
 	
-	let email = &_info.email;
+	if other::mail_check(_info.email.to_string())==false {
+		return Ok(format!("{} is not a valid email.",&_info.email))
+	}
+
+	let email=&_info.email;
 	let username = &_info.username;
 	let password = &_info.password;
 	let repeat_password = &_info.repeat_password;
 
 	if password == repeat_password{
-		println!("query_email returned {:?}.",db_api::query_email(email.to_string(), &_my_pool.pool));
-		Ok(format!("{}+{}+{}",email, username, password))
+		match db_api::query_email(email.to_string(), &_my_pool.pool){
+			  true => Ok(format!("{} already in database.", email))
+			, false => Ok(format!("Can create account with email: {}", email))
+		}
 	}
 	else {
 		// To implement
