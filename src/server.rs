@@ -67,9 +67,17 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 
 pub fn login(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::LoginRequest>
-        ) -> String {
-	
-	String::from("test")
+        ) -> Result<String> {
+	let username = &_info.username;
+	if db_api::query_username(username.to_string(), &_my_pool.pool) == false {
+		return Ok(String::from("Login failed. Maybe recheck username."));
+	}
+	let password = &_info.password;
+	let pwdhash=db_api::get_password(username.to_string(), &_my_pool.pool);
+	if verify_hash(password.to_string(), pwdhash) == false{
+		return Ok(String::from("Login failed. Maybe recheck password."));
+	}
+	Ok(get_token(username.to_string(), password.to_string()))
     
 }
 
@@ -79,4 +87,8 @@ pub fn password_reset(_my_pool: web::Data<database::MyPool>
 	
 	String::from("test")
     
+}
+
+pub fn get_token(username: String, password: String) -> String {
+	hash_password(format!("zoolx+{}+zoolx+{}+zoolx", username, password))
 }

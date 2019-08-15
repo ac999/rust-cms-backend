@@ -60,7 +60,7 @@ pub fn new_user(email: String
 		, password
 	);
 
-	match pool.prep_exec( query, () ){
+	match pool.prep_exec( query, () ) {
 		  Ok(r) => {
 		  	println!("{:?}", r);
 		  	true
@@ -71,4 +71,17 @@ pub fn new_user(email: String
 		}
 	}
 
+}
+
+pub fn get_password(username: String
+	, pool: &mysql::Pool
+	) -> String {
+	let query = format!(
+		"SELECT password FROM users WHERE username LIKE \"{}\"", username
+		);
+	let mut password = String::new();
+	for row in pool.prep_exec( query , () ).unwrap() {
+		password = mysql::from_row(row.unwrap());
+	}
+	password
 }
