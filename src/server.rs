@@ -5,11 +5,14 @@ use crate::database;
 use crate::db_api;
 use crate::other;
 
+
 use time;
 
 use std::io::Error;
 
 use actix_web::{web, Result};
+
+use reqwest::multipart;
 
 fn hash_password(password: String) -> String {
 	hash(password, 5).expect("Hashing error.")
@@ -17,6 +20,31 @@ fn hash_password(password: String) -> String {
 
 fn verify_hash(password: String, password_hash: String) -> bool {
 	verify(password, &password_hash).expect("Hash verify error.")
+}
+
+pub fn send_activation(email: String) -> Result<String, reqwest::Error> {
+	let activation_key = other::random_string_generator();
+	let activation_key = hash(activation_key, 4).expect("Hashing error.");
+
+	let key = String::from(&activation_key);
+
+	let mail_body = format!("https://zoolx.ro/activate\nUse the following key to activate:\n{}", &activation_key);
+	let form = multipart::Form::new()
+        .text("from", "Zoolx <no-reply@zoolx.ro>")
+        .text("to", email)
+        .text("subject", "[ZOOLX] Activation Mail")
+        .text("text", activation_key);
+
+    let res = reqwest::Client::new()
+        .post("https://api.eu.mailgun.net/v3/sandboxfc282248ae5c4e9b934bd4715c2fedf7.mailgun.org")
+        .basic_auth("api", Some("658d7b3328a09c4ab9eb249c258575ec-19f318b0-8c6caf5d"))
+        .multipart(form)
+        .send()?
+        .text()?;
+    println!("{}", res);
+
+    Ok(key)
+
 }
 
 pub fn register(_my_pool: web::Data<database::MyPool>
@@ -51,8 +79,11 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 					, username.to_string()
 					, password
 					, &_my_pool.pool){
-					  true => Ok(String::from
+					  true => {
+					  	// send_activation(email.to_string());
+					  	Ok(String::from
 						("Account created. Check mail for confirmation."))
+					  }
 					, false => Ok(String::from
 						("Error creating account. Check again later."))
 				}

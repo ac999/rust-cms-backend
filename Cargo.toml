@@ -20,3 +20,7 @@ bcrypt = "0.4"
 regex = "1"
 
 time = "0.1"
+
+reqwest = "0.9.20"
+
+rand = "0.7.0"

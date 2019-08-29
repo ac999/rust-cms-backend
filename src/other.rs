@@ -2,6 +2,9 @@ use std::io::{Error, ErrorKind};
 use std::path::Path;
 use std::u16;
 
+use rand::Rng; 
+use rand::distributions::Alphanumeric;
+
 use regex::Regex;
 
 pub fn file_exist(path: String) -> Result<String, Error> {
@@ -31,4 +34,11 @@ pub fn password_check(_password: String) -> bool {
 	let re = Regex::new(r".{8,}")
 	.expect("Regex error");
 	re.is_match(_password.as_str())
+}
+
+pub fn random_string_generator() -> String {
+	rand::thread_rng()
+        .sample_iter(&Alphanumeric)
+        .take(16)
+        .collect::<String>()
 }
