@@ -19,6 +19,7 @@ pub mod other;
 pub mod database;
 pub mod server;
 pub mod db_api;
+pub mod test;
 
 fn main(){
 
@@ -26,8 +27,7 @@ fn main(){
 
     println!("Server address is: {:?}", &addr);
 
-    println!("{}", server::send_activation("mfc@marius-cristian.com".to_string()).expect("Error"));
-    println!("{}", server::send_activation("andreicristian6@pm.me".to_string()).expect("Error"));
+    println!("{}",test::create_and_send_activation());
 
     HttpServer::new(|| App::new()
         .data(database::MyPool{pool: database::establish_connection()})

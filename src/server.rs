@@ -22,18 +22,23 @@ fn verify_hash(password: String, password_hash: String) -> bool {
 	verify(password, &password_hash).expect("Hash verify error.")
 }
 
-pub fn send_activation(email: String) -> Result<String, reqwest::Error> {
-	let activation_key = other::random_string_generator();
-	let activation_key = hash(activation_key, 4).expect("Hashing error.");
+pub fn create_activation(text: &String) -> String {
+	let mut activation: String = other::random_string_generator();
+	activation.push_str(&text);
+	hash(activation, 4).expect("activation hashing error.")
+}
 
-	let key = String::from(&activation_key);
-
-	let mail_body = format!("https://zoolx.ro/activate\nUse the following key to activate:\n{}", &activation_key);
+pub fn send_mail(
+	  from: String
+	, to:String
+	, subject: String
+	, body: String
+	) -> Result<(()), reqwest::Error> {
 	let form = multipart::Form::new()
-        .text("from", "Zoolx <no-reply@zoolx.ro>")
-        .text("to", email)
-        .text("subject", "[ZOOLX] Activation Mail")
-        .text("text", mail_body);
+        .text("from", from)
+        .text("to", to)
+        .text("subject", subject)
+        .text("text", body);
 
     let res = reqwest::Client::new()
         .post("https://api.mailgun.net/v3/sandboxfc282248ae5c4e9b934bd4715c2fedf7.mailgun.org/messages")
@@ -41,10 +46,7 @@ pub fn send_activation(email: String) -> Result<String, reqwest::Error> {
         .multipart(form)
         .send()?
         .text()?;
-    println!("{}", res);
-
-    Ok(key)
-
+        Ok(())
 }
 
 pub fn register(_my_pool: web::Data<database::MyPool>
