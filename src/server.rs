@@ -28,26 +28,6 @@ pub fn create_activation(text: &String) -> String {
 	hash(activation, 4).expect("activation hashing error.")
 }
 
-pub fn send_mail(
-	  from: String
-	, to:String
-	, subject: String
-	, body: String
-	) -> Result<(()), reqwest::Error> {
-	let form = multipart::Form::new()
-        .text("from", from)
-        .text("to", to)
-        .text("subject", subject)
-        .text("text", body);
-
-    let res = reqwest::Client::new()
-        .post("https://api.mailgun.net/v3/sandboxfc282248ae5c4e9b934bd4715c2fedf7.mailgun.org/messages")
-        .basic_auth("api", Some("658d7b3328a09c4ab9eb249c258575ec-19f318b0-8c6caf5d"))
-        .multipart(form)
-        .send()?
-        .text()?;
-        Ok(())
-}
 
 pub fn register(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::RegisterRequest>
