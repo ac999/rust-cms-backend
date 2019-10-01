@@ -31,72 +31,94 @@ pub fn create_activation(text: &String) -> String {
 
 pub fn register(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::RegisterRequest>
-        ) -> Result<String> {
+        ) -> Result<web::Json<models::ServerResponse>> {
 	
 	if other::mail_check(_info.email.to_string())==false {
-		return Ok(format!("{} is not a valid email.",&_info.email))
-	}
-
-	if other::password_check(_info.password.to_string())==false{
-		return Ok(String::from(
-			"Password must be at least of length 8."))
+		return Ok(
+			web::Json( ServerResponse {
+				  status: String::from("Error")
+				, message: format!("{} is not a valid email.",&_info.email)
+				// get message from config json, but how ???
+				,
+				}
+			)
+		)
 	}
 
 	let email=&_info.email;
 	let username = &_info.username;
-	let password = &_info.password;
-	let repeat_password = &_info.repeat_password;
 
 	if db_api::query_username(username.to_string(), &_my_pool.pool) {
-		return Ok(format!("{} already in database.", username))
+		// return Ok(format!("{} already in database.", username))
 	}
 
-	if password == repeat_password{
-		match db_api::query_email(email.to_string(), &_my_pool.pool){
-			  true => Ok(format!("{} already in database.", email))
-			, false => {
-				let password = hash_password(password.to_string());
-				match db_api::new_user(
-					  email.to_string()
-					, username.to_string()
-					, password
-					, &_my_pool.pool){
-					  true => {
-					  	// send_activation(email.to_string());
-					  	Ok(String::from
-						("Account created. Check mail for confirmation."))
-					  }
-					, false => Ok(String::from
-						("Error creating account. Check again later."))
-				}
-			} 
-		}
+	if query_email(email.to_string(), &_my_pool.pool){
+		// return Ok(format!("{} already in database.", email))
 	}
+
+	
 	else {
-		Ok(String::from("Passwords must match."))
+		// Ok(String::from("Passwords must match."))
 	}
     
 }
 
+// password_set
+
+// if other::password_check(_info.password.to_string())==false{
+// 		return Ok(
+// 			web::Json( ServerResponse {
+// 				  status: String::from("Error")
+// 				, message: String::from(
+// 					"Password must be at least of length 8.")
+// 				// get message from config json, but how ???
+// 				,
+// 				}
+// 			)
+// 		)
+// 		// return Ok(String::from(
+// 		// 	"Password must be at least of length 8."))
+// 	}
+
+// if password == repeat_password{
+// 				let password = hash_password(password.to_string());
+// 				match db_api::new_user(
+// 					  email.to_string()
+// 					, username.to_string()
+// 					, password
+// 					, &_my_pool.pool){
+// 					  true => {
+// 					  	// send_activation(email.to_string());
+// 					  	// Ok(String::from
+// 						// ("Account created. Check mail for confirmation."))
+// 					  }
+// 					, false => {
+// 						// Ok(String::from
+// 						// ("Error creating account. Check again later."))
+// 					}
+						
+// 				}
+// 	}
+
 pub fn login(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::LoginRequest>
-        ) -> Result<String> {
+        ) -> Result<web::Json<models::ServerResponse>> {
 	let username = &_info.username;
 	if db_api::query_username(username.to_string(), &_my_pool.pool) == false {
-		return Ok(String::from("Login failed. Maybe recheck username."));
+		// return Ok(String::from("Login failed. Maybe recheck username."));
 	}
 	let password = &_info.password;
 	let pwdhash=db_api::get_password(username.to_string(), &_my_pool.pool);
 	if verify_hash(password.to_string(), pwdhash) == false{
 		return Ok(String::from("Login failed. Maybe recheck password."));
 	}
-	Ok(get_token(username.to_string(), password.to_string()))
+	// Ok(get_token(username.to_string(), password.to_string()))
     
 }
 
 pub fn password_reset(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::PasswordResetRequest>
-        ) -> String {
+        ) -> Result<web::Json<models::ServerResponse>> {
 	
 	String::from("test")
     

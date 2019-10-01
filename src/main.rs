@@ -28,27 +28,35 @@ fn main(){
 
     println!("Server address is: {:?}", &addr);
 
-    println!("{}",test::create_and_send_activation());
-    println!("{}",test::create_and_send_recovery());
+    // println!("{}",test::create_and_send_activation());
+    // println!("{}",test::create_and_send_recovery());
 
     HttpServer::new(|| App::new()
-        .data(database::MyPool{pool: database::establish_connection()})
+        .data(
+            database::MyPool {
+                pool: database::establish_connection() 
+            }
+        )
         .route(
               "/register"
             , web::post().to(server::register)
-            )
+        )
+        .route(
+              "/set-password"
+            , web::post().to(server::set-password)
+        )
         .route(
               "/login"
             , web::post().to(server::login)
-            )
+        )
         .route(
               "/recover"
             , web::post().to(server::password_reset)
-            )
         )
-        .bind(&addr) 
-        .expect(format!("Can not bind to {}", &addr).as_str())
-        .run()
-        .unwrap();
+    )
+    .bind(&addr) 
+    .expect(format!("Can not bind to {}", &addr).as_str())
+    .run()
+    .unwrap();
 
 }
