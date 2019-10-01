@@ -28,20 +28,26 @@ pub fn create_activation(text: &String) -> String {
 	hash(activation, 4).expect("activation hashing error.")
 }
 
+pub fn create_response(status_text: String,
+	message_text: String) -> Result<web::Json<models::ServerResponse>> {
+	Ok(
+		web::Json( ServerResponse {
+			  status: status_text
+			, message: message_text
+			,
+			}
+		)
+	)
+}
 
 pub fn register(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::RegisterRequest>
         ) -> Result<web::Json<models::ServerResponse>> {
 	
 	if other::mail_check(_info.email.to_string())==false {
-		return Ok(
-			web::Json( ServerResponse {
-				  status: String::from("Error")
-				, message: format!("{} is not a valid email.",&_info.email)
+		return create_response(String::from("Error")
+				, format!("{} is not a valid email.",&_info.email)
 				// get message from config json, but how ???
-				,
-				}
-			)
 		)
 	}
 
@@ -49,42 +55,36 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 	let username = &_info.username;
 
 	if db_api::query_username(username.to_string(), &_my_pool.pool) {
-		return Ok(
-			web::Json( ServerResponse {
-				  status: String::From("Error")
-				, message: format!("{} already in database.", username)
+		return create_response(String::from("Error")
+				, format!("{} already in database.", username)
 				// get message from config json, but how ???
-				,
-			})
 			)
 	}
 
 	if query_email(email.to_string(), &_my_pool.pool){
-		return Ok(
-			web::Json( ServerResponse {
-				  status: String::From("Error")
-				, message: format!("{} already in database.", email)
-				// get message from config json, but how ???
-				,
-				}
-			)
+		return create_response(String::from("Error")
+				, format!("{} already in database.", email)
+				// get message from config json, but how ???	
 		)
-			
-				// get message from config json, but how ???
-		// return Ok(format!("{} already in database.", email))
 	}
 
 	
-	Ok(
-		web::Json( ServerResponse {
-			  status: String::From("Ok")
-			, message: format!("Next step was sent to {}", email)
-			// get message from config json, but how ???
-			,
-			}
-		)
-	)    
+	create_response(String::from("Error")
+		, format!("Next step was sent to {}", email)
+		// get message from config json, but how ???
+	)
 }
+
+// 	Ok(
+// 		web::Json( ServerResponse {
+// 			  status: String::From("Ok")
+// 			, message: format!("Next step was sent to {}", email)
+// 			// get message from config json, but how ???
+// 			,
+// 			}
+// 		)
+// 	)    
+// }
 
 // password_set
 
@@ -128,13 +128,24 @@ pub fn login(_my_pool: web::Data<database::MyPool>
         ) -> Result<web::Json<models::ServerResponse>> {
 	let username = &_info.username;
 	if db_api::query_username(username.to_string(), &_my_pool.pool) == false {
+		Ok(
+		web::Json( ServerResponse {
+			  status: String::From("Ok")
+			, message: format!("Next registration step was sent to {}", email)
+			// get message from config json, but how ???
+			,
+			}
+		)
+	)
 		// return Ok(String::from("Login failed. Maybe recheck username."));
 	}
 	let password = &_info.password;
 	let pwdhash=db_api::get_password(username.to_string(), &_my_pool.pool);
-	if verify_hash(password.to_string(), pwdhash) == false{
-		return Ok(String::from("Login failed. Maybe recheck password."));
+	if verify_hash(password.to_string(), pwdhash) == false {
+
+		// return Ok(String::from("Login failed. Maybe recheck password."));
 	}
+
 	// Ok(get_token(username.to_string(), password.to_string()))
     
 }
