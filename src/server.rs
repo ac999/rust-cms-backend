@@ -49,18 +49,41 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 	let username = &_info.username;
 
 	if db_api::query_username(username.to_string(), &_my_pool.pool) {
-		// return Ok(format!("{} already in database.", username))
+		return Ok(
+			web::Json( ServerResponse {
+				  status: String::From("Error")
+				, message: format!("{} already in database.", username)
+				// get message from config json, but how ???
+				,
+			})
+			)
 	}
 
 	if query_email(email.to_string(), &_my_pool.pool){
+		return Ok(
+			web::Json( ServerResponse {
+				  status: String::From("Error")
+				, message: format!("{} already in database.", email)
+				// get message from config json, but how ???
+				,
+				}
+			)
+		)
+			
+				// get message from config json, but how ???
 		// return Ok(format!("{} already in database.", email))
 	}
 
 	
-	else {
-		// Ok(String::from("Passwords must match."))
-	}
-    
+	Ok(
+		web::Json( ServerResponse {
+			  status: String::From("Ok")
+			, message: format!("Next step was sent to {}", email)
+			// get message from config json, but how ???
+			,
+			}
+		)
+	)    
 }
 
 // password_set
