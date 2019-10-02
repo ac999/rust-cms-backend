@@ -24,14 +24,14 @@ fn verify_hash(password: String, password_hash: String) -> bool {
 	verify(password, &password_hash).expect("Hash verify error.")
 }
 
-fn create_activation(text: &String) -> String {
+pub fn create_activation(text: &String) -> String {
 	let mut activation: String = other::random_string_generator();
 	activation.push_str(&text);
 	hash(activation, 4).expect("activation hashing error.")
 }
 
-fn send_activation(mail: &String) {
-	let activation = create_activation(mail) ;
+fn send_activation(mail: String) {
+	let activation = create_activation(&mail) ;
 	let from = String::from("no-reply@test.zoolx.ro");
 	let to = String::from(mail);
 	let subject = String::from("Activation") ;
@@ -179,7 +179,7 @@ pub fn login(_my_pool: web::Data<database::MyPool>
         ) -> Result<web::Json<models::ServerResponse>> {
 	let username = &_info.username;
 	if db_api::query_username(username.to_string(), &_my_pool.pool) == false {
-		Ok(
+		return Ok(
 		web::Json( ServerResponse {
 			  status: String::from("Ok")
 			, message: String::from("Login failed. Maybe recheck username.")
