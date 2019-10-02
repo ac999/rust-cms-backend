@@ -1,7 +1,7 @@
 // use crate::database;
 
 
-use time;
+
 
 pub fn query_email(email: String, pool: &mysql::Pool) -> bool {
 	let query = format!("SELECT * FROM users WHERE email LIKE \"{}\"", email);

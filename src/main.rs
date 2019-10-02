@@ -43,16 +43,16 @@ fn main(){
         )
         .route(
               "/set-password"
-            , web::post().to(server::set-password)
+            , web::post().to(server::set_password)
         )
         .route(
               "/login"
             , web::post().to(server::login)
         )
-        .route(
-              "/recover"
-            , web::post().to(server::password_reset)
-        )
+        // .route(
+        //       "/recover"
+        //     , web::post().to(server::password_reset)
+        // )
     )
     .bind(&addr) 
     .expect(format!("Can not bind to {}", &addr).as_str())

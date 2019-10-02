@@ -1,9 +1,11 @@
 use bcrypt::{hash, verify};
 
-use crate::models;
+use crate::models::{self, ServerResponse};
 use crate::database;
 use crate::db_api;
 use crate::other;
+use crate::mail;
+
 
 
 use time;
@@ -22,13 +24,27 @@ fn verify_hash(password: String, password_hash: String) -> bool {
 	verify(password, &password_hash).expect("Hash verify error.")
 }
 
-pub fn create_activation(text: &String) -> String {
+fn create_activation(text: &String) -> String {
 	let mut activation: String = other::random_string_generator();
 	activation.push_str(&text);
 	hash(activation, 4).expect("activation hashing error.")
 }
 
-pub fn create_response(status_text: String,
+fn send_activation(mail: &String) {
+	let activation = create_activation(mail) ;
+	let from = String::from("no-reply@test.zoolx.ro");
+	let to = String::from(mail);
+	let subject = String::from("Activation") ;
+	let body = format!("127.0.0.1:8081/set_password/{}",activation);
+	mail::send_mail(
+		  from
+		, to
+		, subject
+		, body
+		);
+}
+
+fn create_response(status_text: String,
 	message_text: String) -> Result<web::Json<models::ServerResponse>> {
 	Ok(
 		web::Json( ServerResponse {
@@ -61,7 +77,7 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 			)
 	}
 
-	if query_email(email.to_string(), &_my_pool.pool){
+	if db_api::query_email(email.to_string(), &_my_pool.pool){
 		return create_response(String::from("Error")
 				, format!("{} already in database.", email)
 				// get message from config json, but how ???	
@@ -106,7 +122,7 @@ pub fn set_password(_my_pool: web::Data<database::MyPool>
 	let password = &_info.password;
 	let rpassword = &_info.rpassword;
 
-	if password == repeat_password {
+	if password == rpassword {
 		let password = hash_password(password.to_string());
 		match db_api::new_user(
 			  email.to_string()
@@ -142,6 +158,17 @@ pub fn set_password(_my_pool: web::Data<database::MyPool>
 
 
 	}
+	else {
+		Ok(
+				web::Json( ServerResponse {
+					  status: String::from("Ok")
+					, message: String::from("Passwords are not the same.")
+					// get message from config json, but how ???
+					,
+					}
+				)
+			)
+	}
 }
 
 
@@ -154,33 +181,56 @@ pub fn login(_my_pool: web::Data<database::MyPool>
 	if db_api::query_username(username.to_string(), &_my_pool.pool) == false {
 		Ok(
 		web::Json( ServerResponse {
-			  status: String::From("Ok")
-			, message: format!("Next registration step was sent to {}", email)
+			  status: String::from("Ok")
+			, message: String::from("Login failed. Maybe recheck username.")
+			// get message from config json, but how ???
+			,
+			}
+		)
+	);
+
+		// return Ok(String::from("Login failed. Maybe recheck username."));
+	}
+	let password = &_info.password;
+	let pwdhash=db_api::get_password(username.to_string(), &_my_pool.pool);
+
+	if verify_hash(password.to_string(), pwdhash) == false {
+
+		return Ok(
+		web::Json( ServerResponse {
+			  status: String::from("Ok")
+			, message: String::from("Login failed. Maybe recheck password.")
+			// get message from config json, but how ???
+			,
+			}
+		)
+	);
+	}
+
+	Ok(
+		web::Json( ServerResponse {
+			  status: String::from("Ok")
+			, message: String::from("token")
 			// get message from config json, but how ???
 			,
 			}
 		)
 	)
-		// return Ok(String::from("Login failed. Maybe recheck username."));
-	}
-	let password = &_info.password;
-	let pwdhash=db_api::get_password(username.to_string(), &_my_pool.pool);
-	if verify_hash(password.to_string(), pwdhash) == false {
 
-		// return Ok(String::from("Login failed. Maybe recheck password."));
+	
 	}
 
 	// Ok(get_token(username.to_string(), password.to_string()))
     
-}
 
-pub fn password_reset(_my_pool: web::Data<database::MyPool>
-    , _info: web::Json<models::PasswordResetRequest>
-        ) -> Result<web::Json<models::ServerResponse>> {
+
+// pub fn password_reset(_my_pool: web::Data<database::MyPool>
+//     , _info: web::Json<models::PasswordResetRequest>
+//         ) -> Result<web::Json<models::ServerResponse>> {
 	
-	String::from("test")
+	
     
-}
+// }
 
 pub fn get_token(username: String, password: String) -> String {
 	hash_password(format!("zoolx+{}+zoolx+{}+zoolx", username, password))
