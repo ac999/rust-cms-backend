@@ -68,6 +68,8 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 		)
 	}
 
+	send_activation(email.to_string());
+
 	
 	create_response(String::from("Error")
 		, format!("Next step was sent to {}", email)
@@ -75,53 +77,75 @@ pub fn register(_my_pool: web::Data<database::MyPool>
 	)
 }
 
-// 	Ok(
-// 		web::Json( ServerResponse {
-// 			  status: String::From("Ok")
-// 			, message: format!("Next step was sent to {}", email)
-// 			// get message from config json, but how ???
-// 			,
-// 			}
-// 		)
-// 	)    
-// }
+pub fn set_password(_my_pool: web::Data<database::MyPool>
+	, _info: web::Json<models::SetPasswordRequest>
+	) -> Result<web::Json<models::ServerResponse>> {
 
-// password_set
+	if other::password_check(_info.password.to_string())==false{
+		return Ok(
+			web::Json( ServerResponse {
+				  status: String::from("Error")
+				, message: String::from(
+					"Password must be at least of length 8.")
+				// get message from config json, but how ???
+				,
+				}
+			)
+		)
+	}
 
-// if other::password_check(_info.password.to_string())==false{
-// 		return Ok(
-// 			web::Json( ServerResponse {
-// 				  status: String::from("Error")
-// 				, message: String::from(
-// 					"Password must be at least of length 8.")
-// 				// get message from config json, but how ???
-// 				,
-// 				}
-// 			)
-// 		)
-// 		// return Ok(String::from(
-// 		// 	"Password must be at least of length 8."))
-// 	}
+	// recheck if user & email is valid
+	// to avoid certain types of attacks.
+	// to do...
 
-// if password == repeat_password{
-// 				let password = hash_password(password.to_string());
-// 				match db_api::new_user(
-// 					  email.to_string()
-// 					, username.to_string()
-// 					, password
-// 					, &_my_pool.pool){
-// 					  true => {
-// 					  	// send_activation(email.to_string());
-// 					  	// Ok(String::from
-// 						// ("Account created. Check mail for confirmation."))
-// 					  }
-// 					, false => {
-// 						// Ok(String::from
-// 						// ("Error creating account. Check again later."))
-// 					}
-						
-// 				}
-// 	}
+	// check if password is in password history
+	// to do...
+
+	let email = &_info.email;
+	let username = &_info.username;
+	let password = &_info.password;
+	let rpassword = &_info.rpassword;
+
+	if password == repeat_password {
+		let password = hash_password(password.to_string());
+		match db_api::new_user(
+			  email.to_string()
+			, username.to_string()
+			, password
+			, &_my_pool.pool){
+					true => {
+						Ok(
+							web::Json( ServerResponse {
+								  status: String::from("Ok")
+								, message: String::from(
+									"Password set. You can now login.")
+							// get message from config json, but how ???
+									,
+								}
+							)
+						)
+				  }
+				, false => {
+					Ok(
+						web::Json( ServerResponse {
+							  status: String::from("Error")
+							, message: String::from(
+								"Error creating account. Check again later.")
+						// get message from config json, but how ???
+								,
+							}
+						)
+					)
+				}
+					
+			}
+
+
+	}
+}
+
+
+
 
 pub fn login(_my_pool: web::Data<database::MyPool>
     , _info: web::Json<models::LoginRequest>
