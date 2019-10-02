@@ -86,6 +86,6 @@ pub fn get_password(username: String
 	password
 }
 
-pub fn get_posts(username: String
-	, pool: &mysql::Pool
-	) -> Result<>
+// pub fn get_posts(username: String
+// 	, pool: &mysql::Pool
+// 	) -> Result<>
