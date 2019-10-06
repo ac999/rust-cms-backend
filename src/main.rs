@@ -1,4 +1,3 @@
-#[macro_use]
 extern crate mysql;
 #[macro_use]
 extern crate serde_derive;
@@ -11,16 +10,16 @@ extern crate reqwest;
 
 extern crate rand;
 
-use actix_web::{web, App, HttpServer, Result};
+use actix_web::{web, App, HttpServer};
 
 pub mod models;
-pub mod config;
-pub mod other;
-pub mod database;
+pub mod utils;
 pub mod server;
-pub mod db_api;
-pub mod mail;
-pub mod test;
+pub mod api;
+pub mod tests;
+pub mod db_primitives;
+
+use crate::utils::database;
 
 fn main(){
 

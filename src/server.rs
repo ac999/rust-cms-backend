@@ -2,19 +2,19 @@ use bcrypt::{hash, verify};
 
 use crate::models::{self, ServerResponse};
 use crate::database;
-use crate::db_api;
-use crate::other;
-use crate::mail;
+use crate::db_primitives as db_api;
+use crate::utils::other;
+use crate::utils::mail;
 
 
 
-use time;
 
-use std::io::Error;
+
+
 
 use actix_web::{web, Result};
 
-use reqwest::multipart;
+
 
 fn hash_password(password: String) -> String {
 	hash(password, 5).expect("Hashing error.")

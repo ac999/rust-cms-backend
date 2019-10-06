@@ -1,5 +1,5 @@
 use crate::server;
-use crate::mail;
+use crate::utils::mail;
 
 pub fn create_and_send_activation() -> String{
 	let from = String::from("ZOOLX Activation <no-reply@zoolx.ro>");

@@ -1,6 +1,6 @@
 use mysql as my;
 
-use crate::config;
+use super::config;
 
 pub struct MyPool {
 	  pub pool : my::Pool
