@@ -2,24 +2,24 @@
 pub struct RegisterRequest {
       pub email: String
     , pub username: String
-    , pub mailing_list: bool
+    , pub mailing_list: Option<bool>
     , 
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct SetPasswordRequest {
-	  pub email: String
-	, pub username: String
-	, pub password: String
-	, pub rpassword: String
-	,
+pub struct VerificationRequest {
+      pub email: String
+    , pub token: String
+    ,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct VerificationRequest {
-	  pub email: String
-	, pub token: String
-	,
+pub struct SetPasswordRequest {
+      pub email: String
+    , pub username: String
+    , pub password: String
+    , pub rpassword: String
+    ,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -37,17 +37,17 @@ pub struct PasswordResetRequest {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct ServerResponse {
-	  pub status: String
-	, pub message: String
-	,
+      pub status: String
+    , pub message: String
+    ,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Post {
-	  pub title: String
-	, pub description: String
-	, pub author: String
-	// , pub create_date: String
-	// , pub edit_date: Option<String>
-	,
+      pub title: String
+    , pub description: String
+    , pub author: String
+    // , pub create_date: String
+    // , pub edit_date: Option<String>
+    ,
 }
