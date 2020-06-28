@@ -1,5 +1,3 @@
-**/ssl/
 **/target/
 **/*.rs.bk
 server/Cargo.lock
-server/secrets/
