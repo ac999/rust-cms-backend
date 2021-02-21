@@ -13,7 +13,7 @@ pub fn send_mail(
         .text("text", body);
 
     let _res = reqwest::Client::new()
-        .post("https://api.mailgun.net/v3/sandboxfc282248ae5c4e9b934bd4715c2fedf7.mailgun.org/messages")
+        .post("https://api.mailgun.net/v3/sandbox_name.mailgun.org/messages")
         .basic_auth("api", Some("token"))
         .multipart(form)
         .send()?
